@@ -11,6 +11,7 @@ function initMap() {
         },
         zoom: 13
     });
+
     // Data for real estate listings
     var locations = [
         {
@@ -62,6 +63,7 @@ function initMap() {
     var title;
     var marker;
     var largeInfowindow = new google.maps.InfoWindow();
+    var bounds = new google.maps.LatLngBounds();
     locations.forEach(function(property, index) {
         position = property.location;
         title = property.title;
@@ -73,22 +75,28 @@ function initMap() {
             id: index
         });
         markers.push(marker);
+        // Extend the boundaries of the map for marker if necessary
+        bounds.extend(marker.position);
         // Create click event listener to open infowindow for each marker
         marker.addListener('click', function() {
             populateInfoWindow(this, largeInfowindow);
         });
     });
 
-    function populateInfoWindow(marker, infowindow) {
-        // Check to make sure the infowindow is not already open on this marker
-        if (infowindow.marker != marker) {
-            infowindow.marker = marker;
-            infowindow.setContent('<div>' + marker.title + '</div>');
-            infowindow.open(map, marker);
-            // Clear the .marker property if the infowindow is closed
-            infowindow.addListener('closeclick', function() {
-                infowindow.marker = null;
-            });
-        }
+    map.fitBounds(bounds);
+}
+
+// This function populates the infowindow for the marker that was clicked
+function populateInfoWindow(marker, infowindow) {
+    'use strict';
+    // Check to make sure the infowindow is not already open on this marker
+    if (infowindow.marker != marker) {
+        infowindow.marker = marker;
+        infowindow.setContent('<div>' + marker.title + '</div>');
+        infowindow.open(map, marker);
+        // Clear the .marker property if the infowindow is closed
+        infowindow.addListener('closeclick', function() {
+            infowindow.marker = null;
+        });
     }
 }
