@@ -57,4 +57,21 @@ function initMap() {
         }
     ];
 
+    // Loop through data and create an array of markers
+    var position;
+    var title;
+    var marker;
+    var largeInfowindow = new google.maps.InfoWindow();
+    locations.forEach(function(property, index) {
+        position = property.location;
+        title = property.title;
+        marker = new google.maps.Marker({
+            map: map,
+            position: position,
+            title: title,
+            animation: google.maps.Animation.DROP,
+            id: index
+        });
+        markers.push(marker);
+
 }
