@@ -1,6 +1,43 @@
 var map;
 var markers = [];
 
+// This function populates the infowindow for the marker that was clicked
+function populateInfoWindow(marker, infowindow) {
+    'use strict';
+    // Check to make sure the infowindow is not already open on this marker
+    if (infowindow.marker !== marker) {
+        infowindow.marker = marker;
+        infowindow.setContent('<div>' + marker.title + '</div>');
+        infowindow.open(map, marker);
+        // Clear the .marker property if the infowindow is closed
+        infowindow.addListener('closeclick', function() {
+            infowindow.marker = null;
+        });
+    }
+}
+
+// This function will loop through the markers and display them all
+function showListings() {
+    'use strict';
+    var bounds = new google.maps.LatLngBounds();
+    // Extend the boundaries of the map for each marker and show it
+    markers.forEach(function (marker) {
+        marker.setMap(map);
+        bounds.extend(marker.position);
+    });
+    map.fitBounds(bounds);
+}
+
+// This function will loop through the markers and hide them all
+function hideListings() {
+    'use strict';
+    markers.forEach(function (marker) {
+        marker.setMap(null);
+    });
+}
+
+// This function initializes the map
+// It is called via the google maps api script tag in the html
 function initMap() {
     'use strict';
     // Constructor to create a new map
@@ -82,39 +119,4 @@ function initMap() {
     // Add click event listeners for show/hide listings buttons
     document.getElementById('show-listings').addEventListener('click', showListings);
     document.getElementById('hide-listings').addEventListener('click', hideListings);
-}
-
-// This function populates the infowindow for the marker that was clicked
-function populateInfoWindow(marker, infowindow) {
-    'use strict';
-    // Check to make sure the infowindow is not already open on this marker
-    if (infowindow.marker != marker) {
-        infowindow.marker = marker;
-        infowindow.setContent('<div>' + marker.title + '</div>');
-        infowindow.open(map, marker);
-        // Clear the .marker property if the infowindow is closed
-        infowindow.addListener('closeclick', function() {
-            infowindow.marker = null;
-        });
-    }
-}
-
-// This function will loop through the markers and display them all
-function showListings() {
-    'use strict';
-    var bounds = new google.maps.LatLngBounds();
-    // Extend the boundaries of the map for each marker and show it
-    markers.forEach(function (marker) {
-        marker.setMap(map);
-        bounds.extend(marker.position);
-    });
-    map.fitBounds(bounds);
-}
-
-// This function will loop through the markers and hide them all
-function hideListings() {
-    'use strict';
-    markers.forEach(function (marker) {
-        marker.setMap(null);
-    });
 }
