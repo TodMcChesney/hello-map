@@ -63,27 +63,25 @@ function initMap() {
     var title;
     var marker;
     var largeInfowindow = new google.maps.InfoWindow();
-    var bounds = new google.maps.LatLngBounds();
     locations.forEach(function(property, index) {
         position = property.location;
         title = property.title;
         marker = new google.maps.Marker({
-            map: map,
             position: position,
             title: title,
             animation: google.maps.Animation.DROP,
             id: index
         });
         markers.push(marker);
-        // Extend the boundaries of the map for marker if necessary
-        bounds.extend(marker.position);
         // Create click event listener to open infowindow for each marker
         marker.addListener('click', function() {
             populateInfoWindow(this, largeInfowindow);
         });
     });
 
-    map.fitBounds(bounds);
+    // Add click event listeners for show/hide listings buttons
+    document.getElementById('show-listings').addEventListener('click', showListings);
+    document.getElementById('hide-listings').addEventListener('click', hideListings);
 }
 
 // This function populates the infowindow for the marker that was clicked
@@ -99,4 +97,24 @@ function populateInfoWindow(marker, infowindow) {
             infowindow.marker = null;
         });
     }
+}
+
+// This function will loop through the markers and display them all
+function showListings() {
+    'use strict';
+    var bounds = new google.maps.LatLngBounds();
+    // Extend the boundaries of the map for each marker and show it
+    markers.forEach(function (marker) {
+        marker.setMap(map);
+        bounds.extend(marker.position);
+    });
+    map.fitBounds(bounds);
+}
+
+// This function will loop through the markers and hide them all
+function hideListings() {
+    'use strict';
+    markers.forEach(function (marker) {
+        marker.setMap(null);
+    });
 }
