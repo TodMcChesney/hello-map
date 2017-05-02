@@ -1,24 +1,24 @@
-(function() {
-    'use strict';
-    const gulp = require('gulp');
-    const browserSync = require('browser-sync');
+/* jshint node: true, esversion: 6 */
+'use strict';
 
-    // Running dev tasks from CLI
-    // $ gulp (Runs browserSync and watches for changes)
+const gulp = require('gulp');
+const browserSync = require('browser-sync');
 
-    // browserSync task
-    gulp.task('browserSync', () =>
-        browserSync.init({
-            server: {
-                baseDir: './'
-            }
-        })
-    );
+// Running dev tasks from CLI
+// $ gulp (Runs browserSync and watches for changes)
 
-    // Default gulp task runs browserSync and watches for changes
-    gulp.task('default', ['browserSync'], () => {
-        gulp.watch('js/**/*.js', browserSync.reload);
-        gulp.watch('css/styles.css', browserSync.reload);
-        gulp.watch('index.html', browserSync.reload);
-    });
-})();
+// browserSync task
+gulp.task('browserSync', () =>
+    browserSync.init({
+        server: {
+            baseDir: './'
+        }
+    })
+);
+
+// Default gulp task runs browserSync and watches for changes
+gulp.task('default', ['browserSync'], () => {
+    gulp.watch('js/**/*.js', browserSync.reload);
+    gulp.watch('css/styles.css', browserSync.reload);
+    gulp.watch('index.html', browserSync.reload);
+});
